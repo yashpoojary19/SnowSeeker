@@ -14,9 +14,9 @@ struct ResortDetailsView: View {
         switch resort.size {
             case 1:
                 return "Small"
-            case 2:
+        case 2:
             return "Average"
-            default :
+        default:
             return "Large"
         }
     }
@@ -25,17 +25,17 @@ struct ResortDetailsView: View {
         String(repeating: "$", count: resort.price)
     }
     
-    
-    
-    
     var body: some View {
         Group {
-            Text("Size: \(size)").layoutPriority(1)
+            Text("Size: \(size)")
+                .layoutPriority(1)
             Spacer().frame(height: 0)
-            Text("Size: \(price)").layoutPriority(1)
+            Text("Price: \(price)")
+                .layoutPriority(1)
         }
     }
 }
+
 
 struct ResortDetailsView_Previews: PreviewProvider {
     static var previews: some View {

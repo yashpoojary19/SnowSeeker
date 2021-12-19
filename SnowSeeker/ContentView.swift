@@ -7,59 +7,64 @@
 
 import SwiftUI
 
+
 struct ContentView: View {
-        let resorts: [Resort] = Bundle.main.decode("resorts.json")
-        var body: some View {
-            NavigationView {
-                
-                List(resorts) { resort in
-                    NavigationLink(destination: ResortView(resort: resort)) {
-                        
-                        Image(resort.country)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 25)
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Color.black, lineWidth: 1))
-                        VStack(alignment: .leading) {
-                            Text(resort.name)
-                                .font(.headline)
+    let resorts: [Resort] = Bundle.main.decode("resorts.json")
+    
+    @ObservedObject var favorites = Favorites()
+    
+    
+    
+    var body: some View {
+        NavigationView {
+            List(resorts) { resort in
+                NavigationLink(destination: ResortView(resort: resort)) {
+                    Image(resort.country)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 25)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 1))
+                    
+                    VStack(alignment: .leading) {
+                        Text(resort.name)
+                            .font(.headline)
                             
-                            Text("\(resort.runs)")
-                                .foregroundColor(.secondary)
+                        
+                        Text("\(resort.runs) runs")
+                            .foregroundColor(.secondary)
+                        
+                        }.layoutPriority(1)
+                    
+                        if favorites.contains(resort) {
+                            Spacer()
+                            Image(systemName: "heart.fill")
+                                .accessibilityLabel(Text("This is a favorite resort"))
+                                .foregroundColor(.red)
                         }
-                    
-                }
-                 
-                    
-                
+                    }
             }
-                .navigationBarTitle("Resorts")
-                
-                WelcomeView()
-            }
-    }
-}
-
-extension View {
-    func phoneOnlyStackNavigationView() -> some View {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return AnyView(self.navigationViewStyle(StackNavigationViewStyle()))
-        } else {
-            return AnyView(self)
+            .navigationBarTitle("Resorts")
+            
+            WelcomeView()
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView().previewInterfaceOrientation(.landscapeRight)
+        .environmentObject(favorites)
+      
     }
 }
 
 
+
+//
+//extension View {
+//    func phoneOnlyStackedNavigationView() -> some View {
+//        if UIDevice.current.userInterfaceIdiom == .phone {
+//            return AnyView(navigationViewStyle(StackNavigationViewStyle()))
+//        } else {
+//            return AnyView(self)
+//        }
+//    }
+//}
 //struct UserView: View {
 //    var body: some View {
 //        Group {

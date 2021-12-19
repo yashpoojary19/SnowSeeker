@@ -8,56 +8,49 @@
 import SwiftUI
 
 struct ResortView: View {
+    
     let resort: Resort
     
-    @Environment(\.horizontalSizeClass) var sizeClass
-    
     @State private var selectedFacility: Facility?
-    
+    @Environment(\.horizontalSizeClass) var sizeClass
+    @EnvironmentObject var favorites: Favorites
     
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 0){
                 Image(decorative: resort.id)
                     .resizable()
                     .scaledToFit()
                 
                 Group {
-                    
                     HStack {
-
+                        
                         if sizeClass == .compact {
                             Spacer()
-                            
                             VStack {
                                 ResortDetailsView(resort: resort)
                             }
-                            
                             VStack {
                                 SkiView(resort: resort)
                             }
-                            
+    
                             Spacer()
                         } else {
                             ResortDetailsView(resort: resort)
                             Spacer().frame(height: 0)
                             SkiView(resort: resort)
                         }
-                       
-                        
                     }
                     .font(.headline)
                     .foregroundColor(.secondary)
-                        .padding(.top)
-                    
+                    .padding(.top)
                     
                     Text(resort.description)
                         .padding(.vertical)
                     
-                    Text("Facilities: ")
+                    Text("Facilities")
                         .font(.headline)
-    
                     
                     HStack {
                         ForEach(resort.facilityTypes) { facility in
@@ -68,22 +61,33 @@ struct ResortView: View {
                                 }
                         }
                     }
-                        .padding(.vertical)
                 }
                 .padding(.horizontal)
+                
+                Button(favorites.contains(resort) ? "Remove from favorite": "Add to favorites") {
+                    if favorites.contains(resort) {
+                        favorites.remove(resort)
+                    } else {
+                        favorites.add(resort)
+                    }
+                }
+                .padding()
             }
-            .navigationBarTitle(Text("\(resort.name), \(resort.country)"), displayMode: .inline)
+            .navigationBarTitle(Text("\(resort.name), \(resort.country)"))
+            .navigationBarTitleDisplayMode(.inline)
             .alert(item: $selectedFacility) { facility in
-                    facility.alert
+                facility.alert
             }
-    
         }
     }
+    
 }
-
+extension String: Identifiable {
+    public var id: String { self }
+}
 
 struct ResortView_Previews: PreviewProvider {
     static var previews: some View {
-        ResortView(resort: Resort.example)
+        ResortView(resort: Resort.example).previewInterfaceOrientation(.landscapeLeft)
     }
 }

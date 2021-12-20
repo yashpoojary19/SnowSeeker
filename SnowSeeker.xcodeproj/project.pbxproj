@@ -112,6 +112,7 @@
 		B62BA898276B37740040E268 /* SnowSeeker */ = {
 			isa = PBXGroup;
 			children = (
+				B62BA8C3276B46590040E268 /* resorts.json */,
 				B62BA8D3276B7C510040E268 /* Favorites.swift */,
 				B62BA8CD276B5C950040E268 /* SkiView.swift */,
 				B62BA8CF276B5D1F0040E268 /* ResortDetailsView.swift */,
@@ -121,7 +122,6 @@
 				B62BA899276B37740040E268 /* SnowSeekerApp.swift */,
 				B62BA89B276B37740040E268 /* ContentView.swift */,
 				B62BA89D276B37770040E268 /* Assets.xcassets */,
-				B62BA8C3276B46590040E268 /* resorts.json */,
 				B62BA8C5276B46800040E268 /* Resort.swift */,
 				B62BA8C7276B474F0040E268 /* Bundle-Decodable.swift */,
 				B62BA89F276B37770040E268 /* Preview Content */,

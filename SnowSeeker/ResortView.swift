@@ -11,83 +11,93 @@ struct ResortView: View {
     
     let resort: Resort
     
-    @State private var selectedFacility: Facility?
     @Environment(\.horizontalSizeClass) var sizeClass
+    @State private var selectedFacility: Facility?
     @EnvironmentObject var favorites: Favorites
-    
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 0){
-                Image(decorative: resort.id)
-                    .resizable()
-                    .scaledToFit()
-                
-                Group {
-                    HStack {
+                VStack {
+                    ZStack(alignment: .bottomTrailing) {
+                        Image(decorative: resort.id)
+                            .resizable()
+                            .scaledToFit()
                         
-                        if sizeClass == .compact {
-                            Spacer()
-                            VStack {
+                        Text("Photo credits: \(resort.imageCredit)")
+                            .padding(.horizontal)
+                            .font(.headline)
+                            .background(Color.black.opacity(0.7))
+                            .foregroundColor(.white)
+
+                            
+                            
+                    }
+                    
+                    
+                    Group {
+                    
+                        
+                        HStack {
+                            if sizeClass == .compact {
+                                Spacer()
+                                VStack {
+                                    ResortDetailsView(resort: resort)
+                                }
+                                VStack {
+                                    SkiView(resort: resort)
+                                }
+                                Spacer()
+                            } else {
                                 ResortDetailsView(resort: resort)
-                            }
-                            VStack {
+                                Spacer().frame(height: 0)
                                 SkiView(resort: resort)
                             }
-    
-                            Spacer()
-                        } else {
-                            ResortDetailsView(resort: resort)
-                            Spacer().frame(height: 0)
-                            SkiView(resort: resort)
                         }
-                    }
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-                    .padding(.top)
-                    
-                    Text(resort.description)
-                        .padding(.vertical)
-                    
-                    Text("Facilities")
                         .font(.headline)
-                    
-                    HStack {
-                        ForEach(resort.facilityTypes) { facility in
-                            facility.icon
-                                .font(.title)
-                                .onTapGesture {
-                                    selectedFacility = facility
-                                }
+                        .foregroundColor(.secondary)
+                        .padding(.top)
+                        
+                        Text(resort.description)
+                            .padding(.vertical)
+                        
+                        Text("Facilities")
+                            .font(.headline)
+                        
+                        HStack {
+                            ForEach(resort.facilityTypes) { facility  in
+                                facility.icon
+                                    .font(.title)
+                                    .onTapGesture {
+                                        selectedFacility = facility
+                                    }
+                            }
                         }
+                        .padding(.vertical)
                     }
-                }
-                .padding(.horizontal)
-                
-                Button(favorites.contains(resort) ? "Remove from favorite": "Add to favorites") {
-                    if favorites.contains(resort) {
-                        favorites.remove(resort)
-                    } else {
-                        favorites.add(resort)
+                    .padding(.horizontal)
+                    
+                    Button(favorites.contains(resort) ? "Remove from favorites" : "Add to favorites") {
+                            if favorites.contains(resort) {
+                                favorites.remove(resort)
+                            } else {
+                                favorites.add(resort)
+                            }
                     }
+                    
                 }
-                .padding()
-            }
-            .navigationBarTitle(Text("\(resort.name), \(resort.country)"))
-            .navigationBarTitleDisplayMode(.inline)
-            .alert(item: $selectedFacility) { facility in
-                facility.alert
+                .navigationTitle("\(resort.name), \(resort.country)")
+                .navigationBarTitleDisplayMode(.inline)
+                .alert(item: $selectedFacility) { facility in
+                    facility.alert
             }
         }
     }
     
 }
-extension String: Identifiable {
-    public var id: String { self }
-}
+
 
 struct ResortView_Previews: PreviewProvider {
     static var previews: some View {
-        ResortView(resort: Resort.example).previewInterfaceOrientation(.landscapeLeft)
+        ResortView(resort: Resort.example)
     }
 }
